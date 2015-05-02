@@ -3,7 +3,6 @@
 
 #include <model/init_mysql.h>
 #include <model/init_memory.h>
-#include <model/command.h>
 
 #include <controller/worker.h>
 

@@ -124,7 +124,7 @@ void Worker::line_command(){
         this->ship_list();
     }
     else{
-        printf("Wrong command, type 'help' to show available command");
+        printf("Wrong command, type 'veranda_help' to show available command");
         this->line_command();
     }
 }

@@ -18,7 +18,6 @@
 
 #include "model/get_db.h";
 #include "model/init_mysql.h"
-//#include "model/command.h"
 
 class Worker : public QObject
 {
