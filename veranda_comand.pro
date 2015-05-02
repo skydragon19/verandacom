@@ -26,8 +26,7 @@ SOURCES += main.cpp \
     model/save_db.cpp \
     util/parsing_fuction.cpp \
     util/util_skyw.cpp \
-    model/init_memory.cpp \
-    model/command.cpp
+    model/init_memory.cpp
 
 HEADERS += \
     controller/worker.h \
@@ -37,5 +36,4 @@ HEADERS += \
     util/parsing_fuction.h \
     util/utama.h \
     util/util_skyw.h \
-    model/init_memory.h \
-    model/command.h
+    model/init_memory.h

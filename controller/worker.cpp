@@ -99,9 +99,6 @@ void Worker::allreplyFinished(QNetworkReply *reply){
     }
 }
 
-
-
-
 /*-----------------------------------------------------------------------------------------------*/
 /*                                       COMMAND FUNCTION                                        */
 /*-----------------------------------------------------------------------------------------------*/
@@ -114,17 +111,17 @@ void Worker::line_command(){
     printf("\n$marine.veranda : ");
     cin >> command;
 
-    if(command == "help"){
+    if (command == "veranda_help"){
         this->help_command();
     }
-    else if(command == "show_ship"){
-        this->ship_list_command();
+    else if (command == "veranda_download_single"){
+        this->download_single_ship();
     }
-    else if(command == "download_all_ship"){
+    else if (command == "veranda_download_all"){
         this->download_all_ship();
     }
-    else if(command == "download_single_ship"){
-        this->download_single_ship();
+    else if (command == "veranda_show"){
+        this->ship_list();
     }
     else{
         printf("Wrong command, type 'help' to show available command");
@@ -134,10 +131,11 @@ void Worker::line_command(){
 
 void Worker::help_command(){
     printf("\nCommand Help :\n");
-    printf("show_ship                  -- Show available ship\n");
-    printf("download_all_ship          -- Download all ship on database\n");
-    printf("download_single_ship       -- Download one ship on database\n");
-    printf("read_ship_data             -- Show data from one ship (not storing to database\n");
+    printf("\nFormat  : veranda_[Action]_[Status]\n");
+    printf(" [Action]                                       [Status]\n");
+    printf(" show         -- Show available ship            none    \n");
+    printf(" download     -- Download Data                  single        -- One Ship\n");
+    printf("                                                all           -- All Ship\n");
 
     this->line_command();
 }
