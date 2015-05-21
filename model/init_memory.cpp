@@ -12,7 +12,7 @@ void init_memory::set_memory_for_ship(){
     QSqlQuery q(glo.db);
     int i = 0;
 
-    q.prepare("SELECT s.id_ship, s.name, s.modem_id, s.access_id, s.password, s.SIN, s.MIN, g.url FROM ship s join gateway g on g.id = s.gateway");
+    q.prepare("SELECT s.id_ship, s.name, s.modem_id, s.access_id, s.password, s.SIN, s.MIN, g.url, s.status FROM ship s join gateway g on g.id = s.gateway");
     if(!q.exec()){
         printf("::Memmory Allocation                                                      [FAIL]\n");
         printf("EXIT PROGRAM!!\n");
@@ -28,6 +28,7 @@ void init_memory::set_memory_for_ship(){
                 marine.kapal[i].SIN = q.value(5).toInt();
                 marine.kapal[i].MIN = q.value(6).toInt();
                 strcpy(marine.kapal[i].gateway, q.value(7).toString().toLatin1());
+                marine.kapal[i].status = q.value(8).toInt();
 
                 i++;
             }

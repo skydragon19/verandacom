@@ -1,6 +1,10 @@
 #ifndef UTAMA_H
 #define UTAMA_H
 
+#include <cstdio>
+#include <cstdlib>
+#include <unistd.h>
+
 #include <iostream>
 #include <stdio.h>
 #include <QTextStream>
@@ -23,6 +27,7 @@ struct ship{
     int  SIN;
     int  MIN;
     char gateway[128];
+    int  status;
 };
 
 struct utama{

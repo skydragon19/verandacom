@@ -11,7 +11,8 @@ void util_skyw::readShip_SkyWave(QSqlDatabase db, QString xml_read, int SIN, int
     int cnt = 0;
     int cnt_tu = 0;
 
-    QString epochtime;
+    int epochtime;
+    QString date_time;
     QString MessageUTC;
 
     int sin_xml;
@@ -20,13 +21,6 @@ void util_skyw::readShip_SkyWave(QSqlDatabase db, QString xml_read, int SIN, int
 
     QXmlStreamReader xml;
     QSqlQuery q(db);
-
-    int year;
-    int month;
-    int day;
-    int hour;
-    int minute;
-    int origin;
 
     xml.clear();
     xml.addData(xml_read);
@@ -67,27 +61,23 @@ void util_skyw::readShip_SkyWave(QSqlDatabase db, QString xml_read, int SIN, int
                         float data_f = *(float *) &value;
 
                         if (cnt == 0){
+                            epochtime = (int) data_f;
+
                             const QDateTime time = QDateTime::fromTime_t((int)data_f);
-                            epochtime = time.toString("yyyy-MM-dd hh:mm:ss").toLocal8Bit().data();
+                            date_time = time.toString("yyyy-MM-dd hh:mm:ss").toLocal8Bit().data();
 
-                            year = time.toString("yyyy").toInt();
-                            month = time.toString("MM").toInt();
-                            day = time.toString("dd").toInt();
-                            hour = time.toString("hh").toInt();
-                            minute = time.toString("mm").toInt();
-                            origin = time.toString("ss").toInt();
-
-                            printf("\n                waktu  : %s [%s]", epochtime.toLocal8Bit().data(), name.toLocal8Bit().data());
+                            printf("\n                waktu  : %s [%s]", date_time.toLocal8Bit().data(), name.toLocal8Bit().data());
                             cnt = 1;
                         }
                         else{
                             cnt_tu++;
                             int id_tu = get.id_tu_ship(db, id_ship, cnt_tu);
-                            QString type = get.type_data(db, id_tu);
-                            printf("\n                 %d   : %.2f [%s]", id_tu, data_f, type.toLocal8Bit().data());
 
                             if (id_tu != 0){
-                                save.data(db, data_f, id_tu, 0, epochtime, year, month, day, hour, minute, origin);
+                                QString type = get.type_data(db, id_tu);
+                                printf("\n                 %d   : %.2f [%s]", id_tu, data_f, type.toLocal8Bit().data());
+
+                                save.data(db, data_f, id_tu, 0, epochtime, date_time);
                             }
                         }
                     }

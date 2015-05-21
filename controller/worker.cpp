@@ -25,17 +25,13 @@ void Worker::request_data_semuanya(QString startUTC, QString endUTC){
 
     QNetworkRequest request;
 
-    modem_id.sprintf("%s", marine.kapal[cnt_id].modem_id);
-    access_id.sprintf("%s", marine.kapal[cnt_id].access_id);
-    password.sprintf("%s", marine.kapal[cnt_id].password);
-    gateway.sprintf("%s", marine.kapal[cnt_id].gateway);
-
     SIN = marine.kapal[cnt_id].SIN;
     MIN = marine.kapal[cnt_id].MIN;
 
+    printf("\n>> URL :\n");
     urls.sprintf("%s/get_return_messages.xml/?access_id=%s&password=%s&start_utc=%s&end_utc=%s&mobile_id=%s",
-                 gateway.toLocal8Bit().data(), access_id.toLocal8Bit().data(), password.toLocal8Bit().data(),
-                 startUTC.toLocal8Bit().data(), endUTC.toLocal8Bit().data(), modem_id.toLocal8Bit().data());
+                 marine.kapal[cnt_id].gateway, marine.kapal[cnt_id].access_id, marine.kapal[cnt_id].password,
+                 startUTC.toLocal8Bit().data(), endUTC.toLocal8Bit().data(), marine.kapal[cnt_id].modem_id);
 
     printf("%s", urls.toLocal8Bit().data());
 
@@ -52,17 +48,13 @@ void Worker::request_data_kapal(int id_ship, QString startUTC, QString endUTC){
 
     id_s = id_ship;
 
-    modem_id.sprintf("%s", marine.kapal[id_ship-1].modem_id);
-    access_id.sprintf("%s", marine.kapal[id_ship-1].access_id);
-    password.sprintf("%s", marine.kapal[id_ship-1].password);
-    gateway.sprintf("%s", marine.kapal[id_ship-1].gateway);
-
     SIN = marine.kapal[id_ship-1].SIN;
     MIN = marine.kapal[id_ship-1].MIN;
 
+    printf("\n>> URL :\n");
     urls.sprintf("%s/get_return_messages.xml/?access_id=%s&password=%s&start_utc=%s&end_utc=%s&mobile_id=%s",
-                 gateway.toLocal8Bit().data(), access_id.toLocal8Bit().data(), password.toLocal8Bit().data(),
-                 startUTC.toLocal8Bit().data(), endUTC.toLocal8Bit().data(), modem_id.toLocal8Bit().data());
+                 marine.kapal[id_ship-1].gateway, marine.kapal[id_ship-1].access_id, marine.kapal[id_ship-1].password,
+                 startUTC.toLocal8Bit().data(), endUTC.toLocal8Bit().data(), marine.kapal[id_ship-1].modem_id);
 
     printf("%s", urls.toLocal8Bit().data());
 
@@ -106,36 +98,45 @@ void Worker::line_command(){
     QTextStream cout(stdout);
     QTextStream cin(stdin);
 
-    QString command;
+    QString command ="";
 
     printf("\n$marine.veranda : ");
-    cin >> command;
+    //cin >> command;
+    command = cin.readLine();
 
-    if (command == "veranda_help"){
+    if (command == "help"){
         this->help_command();
     }
-    else if (command == "veranda_download_single"){
+    else if (command == "download" || command == "download "){
         this->download_single_ship();
     }
-    else if (command == "veranda_download_all"){
+    else if (command == "download all" || command == "download all "){
         this->download_all_ship();
     }
-    else if (command == "veranda_show"){
+    else if (command == "show ship" || command == "show ship "){
         this->ship_list();
+        this->line_command();
+    }
+    else if(command == "clear" || command == "clear "){
+        this->clear_screen();
+    }
+    else if(command == "exit" || command == "exit "){
+        this->exit();
+    }
+    else if(command == ""){
+        this->line_command();
     }
     else{
-        printf("Wrong command, type 'veranda_help' to show available command");
+        printf("\nWrong command, type 'help' to show available command\n");
         this->line_command();
     }
 }
 
 void Worker::help_command(){
-    printf("\nCommand Help :\n");
-    printf("\nFormat  : veranda_[Action]_[Status]\n");
-    printf(" [Action]                                       [Status]\n");
-    printf(" show         -- Show available ship            none    \n");
-    printf(" download     -- Download Data                  single        -- One Ship\n");
-    printf("                                                all           -- All Ship\n");
+    printf("\nCommand Help :\n");;
+    printf(" show ship    -- Show available ship\n");
+    printf(" download     -- Download singgle ship data\n");
+    printf(" download all -- Download all ship data\n");
 
     this->line_command();
 }
@@ -191,11 +192,26 @@ void Worker::download_all_ship(){
 
 void Worker::ship_list(){
     printf("\nAvailable Ship :\n");
-    printf("------------------------------------------------------------------------------\n");
-    printf("    ID   |        Mobile ID          |                Ship Name               \n");
-    printf("------------------------------------------------------------------------------\n");
+    printf("-------------------------------------------------------------------------------\n");
+    printf("    ID   |     Status    |        Mobile ID      |          Ship Name          \n");
+    printf("-------------------------------------------------------------------------------\n");
 
     for (int i = 0; i < marine.total; i++){
-        printf("    %d    | %s           | %s \n", i+1, marine.kapal[i].modem_id, marine.kapal[i].name);
+        if (i < 9){
+            printf("    %d    |       %d       |    %s    |   %s \n", i+1, marine.kapal[i].status, marine.kapal[i].modem_id, marine.kapal[i].name);
+        }
+        else{
+            printf("    %d   |       %d       |    %s    |   %s \n", i+1, marine.kapal[i].status, marine.kapal[i].modem_id, marine.kapal[i].name);
+        }
     }
+}
+
+void Worker::clear_screen(){
+    system("clear");
+    this->line_command();
+}
+
+void Worker::exit(){
+    system("exit");
+    this->line_command();
 }
