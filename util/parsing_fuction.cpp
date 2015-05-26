@@ -113,6 +113,12 @@ void parsing_function::read_data(QSqlDatabase db, QString dat, int id_ship){
     int decimal;
     QString data = "";
 
+    QString lat_json = "";
+    QString lng_json = "";
+    bool get_lat = false;
+    bool get_lng = false;
+    bool last_pos_update = false;
+
     char dats[dat.size()+1];
     strcpy(dats, dat.toLatin1());
 
@@ -141,12 +147,28 @@ void parsing_function::read_data(QSqlDatabase db, QString dat, int id_ship){
             }
             else{
                 int id_tu = get.id_tu_ship(db, id_ship, cnt_d-1);
-                printf("\n id_tu : %d", id_tu);
-
                 if (id_tu != 0){
                     QString type = get.type_data(db, id_tu);
-                    printf("\n                 %d   : %.2f [%s]", id_tu, data_f, type.toLocal8Bit().data());
 
+                    /* JSON Last_Update_Possition */
+                    if (last_pos_update == false){
+                        if (get_lat == true && get_lng == true){
+                            vjson.json_lastpos(id_ship, lat_json, lng_json);
+                            last_pos_update = true;
+                        }
+                        else{
+                            if (type == "lat"){
+                                lat_json = vjson.get_lat(data_f, type);
+                                get_lat = true;
+                            }
+                            else if(type == "lng"){
+                                lng_json = vjson.get_lng(data_f, type);
+                                get_lng = true;
+                            }
+                        }
+                    }
+
+                    printf("\n                 %d   : %f [%s]", id_tu, data_f, type.toLocal8Bit().data());
                     save.data(db, data_f, id_tu, 0, epochtime, date_time);
                 }
             }

@@ -1,5 +1,8 @@
 #include "util_skyw.h"
 
+struct jsons js;
+extern struct utama marine;
+
 util_skyw::util_skyw(QObject *parent) :
     QObject(parent)
 {
@@ -22,6 +25,12 @@ void util_skyw::readShip_SkyWave(QSqlDatabase db, QString xml_read, int SIN, int
     QXmlStreamReader xml;
     QSqlQuery q(db);
 
+    QString lat_json;
+    QString lng_json;
+    bool get_lat;
+    bool get_lng;
+    bool last_pos_update;
+
     xml.clear();
     xml.addData(xml_read);
 
@@ -31,6 +40,13 @@ void util_skyw::readShip_SkyWave(QSqlDatabase db, QString xml_read, int SIN, int
             if (xml.name() == "MessageUTC"){
                 MessageUTC = xml.readElementText();
                 printf("\n\n MessageUTC     : %s", MessageUTC.toLocal8Bit().data());
+
+                last_pos_update = false;
+                get_lat = false;
+                get_lng = false;
+
+                lat_json ="";
+                lng_json ="";
             }
             if (xml.name() == "SIN"){
                 sin_xml = xml.readElementText().toInt();
@@ -66,17 +82,42 @@ void util_skyw::readShip_SkyWave(QSqlDatabase db, QString xml_read, int SIN, int
                             const QDateTime time = QDateTime::fromTime_t((int)data_f);
                             date_time = time.toString("yyyy-MM-dd hh:mm:ss").toLocal8Bit().data();
 
+                            js.daily_package = vjson.json_daily(id_ship, js.package, js.daily_package);
+
+                            js.data = "";
+                            js.data = vjson.get_time_data(date_time, name);
+
                             printf("\n                waktu  : %s [%s]", date_time.toLocal8Bit().data(), name.toLocal8Bit().data());
                             cnt = 1;
                         }
                         else{
                             cnt_tu++;
                             int id_tu = get.id_tu_ship(db, id_ship, cnt_tu);
-
                             if (id_tu != 0){
                                 QString type = get.type_data(db, id_tu);
-                                printf("\n                 %d   : %.2f [%s]", id_tu, data_f, type.toLocal8Bit().data());
 
+                                /* JSON Last_Update_Possition */
+                                if (last_pos_update == false){
+                                    if (get_lat == true && get_lng == true){
+                                        vjson.json_lastpos(id_ship, lat_json, lng_json);
+                                        last_pos_update = true;
+                                    }
+                                    else{
+                                        if (type == "lat"){
+                                            lat_json = vjson.get_lat(data_f, type);
+                                            get_lat = true;
+                                        }
+                                        else if(type == "lng"){
+                                            lng_json = vjson.get_lng(data_f, type);
+                                            get_lng = true;
+                                        }
+                                    }
+                                }
+
+                                js.data = vjson.get_data_per_type(js.data, data_f, type);
+                                js.package = vjson.amplop(js.data, id_ship, marine.kapal[id_ship].modem_id);
+
+                                printf("\n                 %d   : %f [%s]", id_tu, data_f, type.toLocal8Bit().data());
                                 save.data(db, data_f, id_tu, 0, epochtime, date_time);
                             }
                         }

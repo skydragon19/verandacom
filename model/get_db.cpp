@@ -24,20 +24,18 @@ int get_db::id_tu_ship(QSqlDatabase db, int id_ship, int urutan){
     QString query;
 
     query.sprintf("SELECT count(id_tu), id_tu FROM parsing_ref WHERE id_ship = %d and urutan_data_monita = %d", id_ship, urutan);
-    printf("\n%s", query.toLocal8Bit().data());
-
     q.prepare(query);
     if(!q.exec()){
         printf("err():\n");
         return (int) 0;
     }
     else{
-        while(q.next()){    
-            if (q.numRowsAffected() == 0){
+        while(q.next()){
+            if (q.value(0).toInt() == 0){
                 return (int) 0;
             }
             else{
-                return (int) q.value(0).toInt();
+                return (int) q.value(1).toInt();
             }
         }
     }

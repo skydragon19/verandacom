@@ -47,6 +47,7 @@ private slots:
     void download_all_ship();
     void download_single_ship();
     void ship_list();
+
     void clear_screen();
     void exit();
 

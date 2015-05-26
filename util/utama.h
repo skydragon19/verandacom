@@ -35,4 +35,10 @@ struct utama{
     struct ship kapal[50]; /* masih hardoce untuk alokasi 50 kapal */
 };
 
+struct jsons{
+    QString data;
+    QString package;
+    QString daily_package;
+};
+
 #endif // UTAMA_H

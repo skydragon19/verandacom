@@ -7,6 +7,7 @@
 
 #include <model/get_db.h>
 #include <model/save_db.h>
+#include <model/json/verjson.h>
 
 #define  GMT    25200
 
@@ -30,6 +31,7 @@ public:
 private:
     get_db get;
     save_db save;
+    verjson vjson;
 
 };
 

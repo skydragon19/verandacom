@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'worker.h'
 **
-** Created: Wed May 20 14:30:26 2015
+** Created: Tue May 26 17:43:18 2015
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!

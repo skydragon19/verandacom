@@ -19,6 +19,8 @@ int main(int argc, char *argv[])
     printf("Release    : \n");
     printf("Develop by : Design Dept. - PT. Daunbiru Engineering\n\n");
 
+    printf("===============================================================================\n\n");
+
     printf("System Initialization . . .\n\n");
 
     init_mysql mysql;

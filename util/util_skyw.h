@@ -10,6 +10,8 @@
 
 #include <model/get_db.h>
 #include <model/save_db.h>
+#include <model/json/verjson.h>
+
 #include <util/parsing_fuction.h>
 #include <util/utama.h>
 
@@ -28,6 +30,8 @@ private:
     get_db get;
     save_db save;
     parsing_function parse;
+    verjson vjson;
+
 };
 
 #endif // UTIL_SKYW_H

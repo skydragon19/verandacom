@@ -26,7 +26,9 @@ SOURCES += main.cpp \
     model/save_db.cpp \
     util/parsing_fuction.cpp \
     util/util_skyw.cpp \
-    model/init_memory.cpp
+    model/init_memory.cpp \
+    model/json/json.cpp \
+    model/json/verjson.cpp
 
 HEADERS += \
     controller/worker.h \
@@ -36,4 +38,6 @@ HEADERS += \
     util/parsing_fuction.h \
     util/utama.h \
     util/util_skyw.h \
-    model/init_memory.h
+    model/init_memory.h \
+    model/json/json.h \
+    model/json/verjson.h
